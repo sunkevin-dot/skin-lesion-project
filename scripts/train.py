@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torchvision.models as models
+from sklearn.metrics import accuracy_score, roc_auc_score
+import torch.nn.functional as F
 
 from dataset import SkinDataset, train_transform, val_transform
 
@@ -11,8 +13,8 @@ from dataset import SkinDataset, train_transform, val_transform
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load datasets
-train_dataset = SkinDataset("../splits/train.csv", transform=train_transform)
-val_dataset = SkinDataset("../splits/val.csv", transform=val_transform)
+train_dataset = SkinDataset("splits/train.csv", transform=train_transform)
+val_dataset = SkinDataset("splits/val.csv", transform=val_transform)
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
@@ -54,6 +56,9 @@ for epoch in range(epochs):
     model.eval()
     val_loss = 0
 
+    all_labels = []
+    all_probs = []
+
     with torch.no_grad():
         for images, labels in val_loader:
             images = images.to(device)
@@ -63,4 +68,22 @@ for epoch in range(epochs):
             loss = criterion(outputs, labels)
             val_loss += loss.item()
 
-    print(f"Epoch {epoch+1}, Val Loss: {val_loss:.4f}")
+            probs = torch.sigmoid(outputs)
+
+            all_probs.extend(probs.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+
+    # Convert to binary predictions
+    preds = [1 if p > 0.5 else 0 for p in all_probs]
+
+    # Metrics
+    accuracy = accuracy_score(all_labels, preds)
+
+    try:
+        auc = roc_auc_score(all_labels, all_probs)
+    except:
+        auc = 0.0
+
+    print(f"Epoch {epoch+1}, Val Loss: {val_loss / len(val_loader):.4f}")
+    print(f"Epoch {epoch+1}, Accuracy: {accuracy:.4f}, AUC: {auc:.4f}")
+    
