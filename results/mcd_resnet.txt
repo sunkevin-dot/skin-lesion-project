@@ -1,0 +1,18 @@
+Model: ResNet18 + Dropout (MCD)
+Dataset: HAM10000 (binary)
+Split: 70/15/15
+
+Batch size: 32
+Learning rate: 1e-4
+Epochs: 5
+
+Best Epoch: 4
+
+Val Loss: 0.1922
+Accuracy: 0.9174
+AUC: 0.9327
+
+Observations:
+- Higher AUC than baseline (0.9208 → 0.9327)
+- Slightly noisier training due to dropout
+- Improved generalization

@@ -6,6 +6,9 @@ import torchvision.models as models
 from sklearn.metrics import accuracy_score, roc_auc_score
 import torch.nn.functional as F
 
+import os
+os.makedirs("models", exist_ok=True)
+
 from dataset import SkinDataset, train_transform, val_transform
 
 
@@ -22,8 +25,11 @@ val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 # Load pretrained ResNet18
 model = models.resnet18(pretrained=True)
 
-# Modify final layer for binary classification
-model.fc = nn.Linear(model.fc.in_features, 1)
+# Replace final layer with dropout + linear
+model.fc = nn.Sequential(
+    nn.Dropout(p=0.3),
+    nn.Linear(model.fc.in_features, 1)
+)
 model = model.to(device)
 
 # Loss + optimizer
@@ -32,6 +38,7 @@ optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
 # Training loop
 epochs = 5  # start small for testing
+best_auc = 0
 
 for epoch in range(epochs):
     model.train()
@@ -86,4 +93,9 @@ for epoch in range(epochs):
 
     print(f"Epoch {epoch+1}, Val Loss: {val_loss / len(val_loader):.4f}")
     print(f"Epoch {epoch+1}, Accuracy: {accuracy:.4f}, AUC: {auc:.4f}")
+
+    if auc > best_auc:
+        best_auc = auc
+        torch.save(model.state_dict(), "models/best_model.pth")
+        print("Saved new best model!")
     

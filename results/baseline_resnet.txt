@@ -1,0 +1,18 @@
+Model: ResNet18 (pretrained)
+Dataset: HAM10000 (binary)
+Split: 70/15/15
+
+Batch size: 32
+Learning rate: 1e-4
+Epochs: 5
+
+Best Epoch: 5
+
+Val Loss: 0.2049
+Accuracy: 0.9101
+AUC: 0.9208
+
+Observations:
+- Strong baseline performance
+- No severe overfitting
+- Stable improvement across epochs
