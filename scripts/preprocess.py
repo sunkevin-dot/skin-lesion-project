@@ -48,11 +48,11 @@ val_df, calib_df = train_test_split(
 
 # Save splits
 print("Saving splits...")
-os.makedirs("../splits", exist_ok=True)
+os.makedirs("splits", exist_ok=True)
 
-train_df[["image_path", "label"]].to_csv("../splits/train.csv", index=False)
-val_df[["image_path", "label"]].to_csv("../splits/val.csv", index=False)
-calib_df[["image_path", "label"]].to_csv("../splits/calib.csv", index=False)
+train_df[["image_path", "label"]].to_csv("splits/train.csv", index=False)
+val_df[["image_path", "label"]].to_csv("splits/val.csv", index=False)
+calib_df[["image_path", "label"]].to_csv("splits/calib.csv", index=False)
 
 # Print summary
 print("Train:", len(train_df))
