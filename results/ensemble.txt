@@ -1,0 +1,9 @@
+Model: Deep Ensemble (3 models)
+Best AUC (individual): ~0.929
+Average prediction: 0.236
+Average uncertainty: 0.0103
+
+Observations:
+- Higher uncertainty magnitude than MCD
+- More incorrect samples appear among high-uncertainty predictions
+- Uncertainty still not perfectly aligned with errors

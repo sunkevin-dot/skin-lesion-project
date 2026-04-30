@@ -1,0 +1,2 @@
+method,model,dataset,uncertainty_correct,uncertainty_incorrect,entropy_correct,entropy_incorrect
+ensemble,aug,val,0.011345544179838131,0.03266354531651787,0.23369328835660014,0.5759935161880866

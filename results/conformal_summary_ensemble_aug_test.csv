@@ -1,0 +1,2 @@
+method,model,dataset,coverage,avg_set_size,ambiguity_rate
+ensemble,aug,test,0.86185967467832,1.041029376062151,0.041029376062151006
